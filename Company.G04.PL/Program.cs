@@ -1,3 +1,8 @@
+using Company.G04.BLL.Interfaces;
+using Company.G04.BLL.Repositries;
+using Company.G04.DAL.Data.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace Company.G04.PL
 {
     public class Program
@@ -8,7 +13,11 @@ namespace Company.G04.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow DI For DepartmentRepository
+            builder.Services.AddDbContext<CompanyDbContext>(options=>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaltConnection"));
+            }); // Allow DI For CompanyDbContext 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

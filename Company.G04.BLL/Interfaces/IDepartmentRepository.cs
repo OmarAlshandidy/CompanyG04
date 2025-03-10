@@ -11,7 +11,7 @@ namespace Company.G04.BLL.Interfaces
     {
         IEnumerable<Department> GetAll();
 
-        Department Get(int id); 
+        Department? Get(int id); 
 
         int Add(Department Model);
 
