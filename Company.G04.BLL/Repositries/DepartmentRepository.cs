@@ -9,21 +9,23 @@ using Company.G04.DAL.Moudel;
 
 namespace Company.G04.BLL.Repositries
 {
-    internal class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private readonly CompanyDbContext _context; //null 
-        DepartmentRepository()
-        {
-            _context = new CompanyDbContext();
-        }
+                                                    // aSK CLR  Create Object DepartemntRepository 
+
+       public DepartmentRepository(CompanyDbContext context)
+         {
+           _context = context;
+          }
         public IEnumerable<Department> GetAll()
         {
             return _context.Departments.ToList();
         }
 
-        public Department? Get(int id)
+        public Department? Get(int Id)
         {
-            return _context.Departments.Find(id);
+            return _context.Departments.Find(Id);
         }
         public int Add(Department Model)
         {
