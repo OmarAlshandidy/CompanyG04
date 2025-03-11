@@ -3,6 +3,8 @@ using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
 
 namespace Company.G04.PL.Controllers
 {
@@ -44,6 +46,16 @@ namespace Company.G04.PL.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Details(int? id )
+        {
+            if (id is null) return BadRequest("Invaliad Id");
+            var departments = _departmentRepository.Get(id.Value);
+            if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
+
+            return View(departments);
         }
     }
 }
