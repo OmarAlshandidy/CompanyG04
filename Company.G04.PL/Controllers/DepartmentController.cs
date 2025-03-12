@@ -48,14 +48,14 @@ namespace Company.G04.PL.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpGet]     
         public IActionResult Details(int? id , string ViewName = "Details")
         {
             if (id is null) return BadRequest("Invaliad Id");
             var departments = _departmentRepository.Get(id.Value);
             if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
 
-            return View(ViewName,departments);
+            return View(ViewName,departments);      
         }
         [HttpGet]
         public IActionResult Edit(int? id)
