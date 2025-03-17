@@ -11,7 +11,10 @@ namespace Company.G04.BLL.Repositries
 {
     public class EmployeeRepository : GenericRepository<Employee>,IEmployeeRepository
     {
-        public EmployeeRepository(CompanyDbContext context):base(context) { }
+        public EmployeeRepository(CompanyDbContext context) : base(context) 
+        {
+
+        }
       
 
 

@@ -86,13 +86,12 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            //if (id is null) return BadRequest("Invalid Id ");
-            //var departments = _departmentRepository.Get(id.Value);
-            //if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-
+            
             return Details(id, "Delete");
           
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Department department)
