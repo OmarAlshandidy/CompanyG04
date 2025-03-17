@@ -9,7 +9,7 @@ using Company.G04.DAL.Moudel;
 
 namespace Company.G04.BLL.Repositries
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T :BaseEntity 
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity 
     {
         private readonly CompanyDbContext _context;
 
