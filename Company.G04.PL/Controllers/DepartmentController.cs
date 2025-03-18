@@ -60,27 +60,40 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            //if (id is null) return BadRequest("Invalid Id ");
-            //var departments = _departmentRepository.Get(id.Value);
-            //if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-
-            return Details(id, "Edit");
+            if (id is null) return BadRequest("Invalid Id ");
+            var departments = _departmentRepository.Get(id.Value);
+            if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
+            var departmentDto = new CreateDepartmentDto()
+            {
+               
+                Code = departments.Code,
+                Name = departments.Name,
+                CreateAt = departments.CreateAt
+            };
+            return View(departmentDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id , Department department)
+        public IActionResult Edit([FromRoute] int id , CreateDepartmentDto model)
         {
             if (ModelState.IsValid)
             {
-                if (id != department.Id) return BadRequest();
+                var department = new Department()
+                {
+                    Id=id,
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreateAt = model.CreateAt
+                };
+                //if (id != department.Id) return BadRequest();
                 var count = _departmentRepository.Update(department);
                 if (count > 0)
                 {
                     return RedirectToAction("Index");
                 }
             }
-            return View(department);
+            return View(model);
         }
 
         [HttpGet]
