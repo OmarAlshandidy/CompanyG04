@@ -7,24 +7,7 @@
 <h1>Delete Department </h1>
 
 <form asp-action="Delete">
-    <div>
-        <label asp-for="Code" class="col-form-label"></label>
-        <input asp-for="Code" class="form-control"readonly />
-
-
-    </div>
-
-    <div class="my-3">
-        <label asp-for="Name" class="col-form-label"></label>
-        <input asp-for="Name" class="form-control" readonly />
-
-    </div>
-
-    <div class="my-3">
-        <label asp-for="CreateAt" class="col-form-label"></label>
-        <input asp-for="CreateAt" class="form-control"readonly />
-
-    </div>
+    <partial name="DepartmentPartailView/_DeleteDetailsPartialView" />
 
     <div>
         <input type="submit" value="Delete" class="btn btn-danger" />
