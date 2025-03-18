@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Company.G04.DAL.Moudel;
 using Newtonsoft.Json.Serialization;
 
 namespace Company.G04.PL.Dtos
@@ -25,5 +26,8 @@ namespace Company.G04.PL.Dtos
         public DateTime HiringDate { get; set; }
         [DisplayName("Date Of Create")]
         public DateTime CreateAt { get; set; }
+        [DisplayName("Department ")]
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
     }
 }

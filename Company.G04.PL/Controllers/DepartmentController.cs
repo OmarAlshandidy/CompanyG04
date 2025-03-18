@@ -21,6 +21,13 @@ namespace Company.G04.PL.Controllers
         public IActionResult Index()
         {
              var departments = _departmentRepository.GetAll();
+            // Dictionary  : 3.Property  
+            // 1. ViewData : Transfer Extra Information From Controller (Action) To View
+            ViewData["Message"] = "Hello From View Data";
+
+            // 2. ViewBag  : Transfer Extra Information From Controller (Action) To Vie
+            ViewBag.Message = "HEllo From View Bag";
+            // 3.TempData
             return View(departments);
         }
         [HttpGet]
@@ -42,6 +49,7 @@ namespace Company.G04.PL.Controllers
                 var count = _departmentRepository.Add(departments);
                 if(count > 0)
                 {
+                    TempData["Message"] = "Department Is Created !!"; 
                     return RedirectToAction("Index");
                 }
             }

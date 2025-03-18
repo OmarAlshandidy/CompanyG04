@@ -14,10 +14,12 @@ namespace Company.G04.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository,IDepartmentRepository departmentRepository)
         {
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
         [HttpGet]
         public ActionResult Index()
@@ -29,6 +31,8 @@ namespace Company.G04.PL.Controllers
 
         public ActionResult Create()
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             return View();
         }
         [HttpPost]
@@ -39,7 +43,7 @@ namespace Company.G04.PL.Controllers
             {
                 var employee = new Employee()
                 {
-
+                 
                     Name = model.Name,
                     Age = model.Age,
                     Address = model.Address,
@@ -50,6 +54,8 @@ namespace Company.G04.PL.Controllers
                     IsDeleted = model.IsDeleted,
                     HiringDate = model.HiringDate,
                     CreateAt = model.CreateAt,
+                    DepartmentId = model.DepartmentId
+                   
 
                 };
                 var count = _employeeRepository.Add(employee);
@@ -77,11 +83,14 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
+            
+
             if (id is null) return BadRequest("Invalid Id ");
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
             var employeeDto = new CreateEmployeeDto()
             {
+
                 Name = employee.Name,
                 Age = employee.Age,
                 Address = employee.Address,
@@ -92,6 +101,9 @@ namespace Company.G04.PL.Controllers
                 IsDeleted = employee.IsDeleted,
                 HiringDate = employee.HiringDate,
                 CreateAt = employee.CreateAt,
+                DepartmentId = employee.DepartmentId
+
+
             };
             return View(employeeDto);
         }
@@ -115,7 +127,7 @@ namespace Company.G04.PL.Controllers
                     IsDeleted = model.IsDeleted,
                     HiringDate = model.HiringDate,
                     CreateAt = model.CreateAt,
-
+                     DepartmentId   = model.DepartmentId
                 };
                 // if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Update(employee);

@@ -1,11 +1,28 @@
 ﻿@model IEnumerable<Department>
 @{
     ViewData["Title"] = "Index";
+    //ViewData["Message"];
+    // string? ViewDataMessage = ViewData["Message"] as string;
+    // string? ViewBagMessage = ViewBag.Message;
 }
 <h1>All Departments</h1>
 
 <br />
 <br />
+
+@* <div class="m-3 alert alert-danger"> 
+    <p>@ViewData["Message"]</p>
+</div> *@
+
+@* <div class="m-3 alert alert-danger">
+    <p>@ViewBag.Message</p>
+ </div>*@
+ @if(!string.IsNullOrEmpty(TempData["Message"] as string)){
+<div class="mt-4 alert  alert-info">
+    <p>@TempData["Message"]</p>
+</div>
+ }
+
 <a asp-action="Create" asp-controller="Department" class="btn btn-primary"> Create Department </a>
 
 <br />
