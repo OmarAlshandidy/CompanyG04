@@ -7,6 +7,21 @@
 <br />
 <br />
 
+
+<form asp-action="Index" method="get" class="mt-4 row justify-content-center align-items-center">
+    <div class="row col-8 offest-1">
+        <div class="col-8">
+        <input placeholder="Search By Name " id="SearchInput" name= "SearchInput" class="form-control" />
+        </div>
+
+        <div class="col-4">
+        <input type="submit" class="btn btn-success" value="Search" />
+        </div>
+
+    </div>
+</form>
+
+<br/>
 <a asp-action="Create" asp-controller="Employee" class="btn btn-primary"> Create Employee </a>
 
 <br/>

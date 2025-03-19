@@ -29,7 +29,11 @@ namespace Company.G04.BLL.Repositries
 
         public T? Get(int id)
         {
-           return _context.Set<T>().Find(id);
+            if (typeof(T) == typeof(Employee))
+            {
+                return _context.Employees.Include(E => E.Department).FirstOrDefault(E=>E.Id==id ) as T;
+            }
+            return _context.Set<T>().Find(id);
            
         }
 
@@ -41,11 +45,7 @@ namespace Company.G04.BLL.Repositries
 
         public int Update(T model)
         {
-            if (typeof(T) == typeof(Employee))
-            {
-                return _context.SaveChanges();
-
-            }
+            
             _context.Set<T>().Update(model);
             return _context.SaveChanges();
         }

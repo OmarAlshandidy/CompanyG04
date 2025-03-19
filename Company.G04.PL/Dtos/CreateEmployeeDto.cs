@@ -28,6 +28,8 @@ namespace Company.G04.PL.Dtos
         public DateTime CreateAt { get; set; }
         [DisplayName("Department ")]
         public int? DepartmentId { get; set; }
+
+        [DisplayName("DepartmentName ")]
         public Department? Department { get; set; }
     }
 }

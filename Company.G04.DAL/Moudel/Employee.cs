@@ -19,6 +19,6 @@ namespace Company.G04.DAL.Moudel
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
         public int? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+        public Department Department { get; set; }
     }
 }

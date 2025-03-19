@@ -22,9 +22,18 @@ namespace Company.G04.PL.Controllers
             _departmentRepository = departmentRepository;
         }
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string? SearchInput)
         {
-            var employees = _employeeRepository.GetAll();
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepository.GetAll();
+            }
+            else
+            {
+                employees = _employeeRepository.GetByName(SearchInput);
+            }
+            
             return View(employees);
         }
         [HttpGet]
@@ -72,18 +81,20 @@ namespace Company.G04.PL.Controllers
 
         [HttpGet]
         public ActionResult Details(int? id, string ViewName = "Details")
+
         {
             if (id is null) return BadRequest();
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-
+           
             return View(ViewName, employee);
         }
 
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-            
+
+           
 
             if (id is null) return BadRequest("Invalid Id ");
             var employee = _employeeRepository.Get(id.Value);
@@ -101,10 +112,12 @@ namespace Company.G04.PL.Controllers
                 IsDeleted = employee.IsDeleted,
                 HiringDate = employee.HiringDate,
                 CreateAt = employee.CreateAt,
-                DepartmentId = employee.DepartmentId
-
+                DepartmentId = employee.DepartmentId,
 
             };
+
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             return View(employeeDto);
         }
 
@@ -127,11 +140,11 @@ namespace Company.G04.PL.Controllers
                     IsDeleted = model.IsDeleted,
                     HiringDate = model.HiringDate,
                     CreateAt = model.CreateAt,
-                     DepartmentId   = model.DepartmentId
+                     DepartmentId = model.DepartmentId
                 };
                 // if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Update(employee);
-                if (count > 0)
+                    if (count > 0)
                 {
                     return RedirectToAction("Index");
                 }
