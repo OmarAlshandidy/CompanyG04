@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Moudel;
@@ -16,16 +16,16 @@ namespace Company.G04.PL.Controllers
 
         // aSK CLR  Create Object DepartemntRepository 
         public DepartmentController(IDepartmentRepository departmentRepository
-            ,IMapper mapper)
+            , IMapper mapper)
         {
             _departmentRepository = departmentRepository;
-          _mapper = mapper;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-             var departments = _departmentRepository.GetAll();
+            var departments = _departmentRepository.GetAll();
             // Dictionary  : 3.Property  
             // 1. ViewData : Transfer Extra Information From Controller (Action) To View
             ViewData["Message"] = "Hello From View Data";
@@ -45,25 +45,25 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var  departments = _mapper.Map<Department>(model);
+                var departments = _mapper.Map<Department>(model);
                 var count = _departmentRepository.Add(departments);
-                if(count > 0)
+                if (count > 0)
                 {
-                    TempData["Message"] = "Department Is Created !!"; 
+                    TempData["Message"] = "Department Is Created !!";
                     return RedirectToAction("Index");
                 }
             }
             return View(model);
         }
 
-        [HttpGet]     
-        public IActionResult Details(int? id , string ViewName = "Details")
+        [HttpGet]
+        public IActionResult Details(int? id, string ViewName = "Details")
         {
             if (id is null) return BadRequest("Invaliad Id");
             var departments = _departmentRepository.Get(id.Value);
             if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
 
-            return View(ViewName,departments);      
+            return View(ViewName, departments);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -71,14 +71,14 @@ namespace Company.G04.PL.Controllers
             if (id is null) return BadRequest("Invalid Id ");
             var departments = _departmentRepository.Get(id.Value);
             if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-           var departmentDto = _mapper.Map<CreateDepartmentDto>(departments);
-            
+            var departmentDto = _mapper.Map<CreateDepartmentDto>(departments);
+
             return View(departmentDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id , CreateDepartmentDto model)
+        public IActionResult Edit([FromRoute] int id, CreateDepartmentDto model)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace Company.G04.PL.Controllers
                 //    CreateAt = model.CreateAt
                 //};
                 //if (id != department.Id) return BadRequest();
-                var  department  =  _mapper.Map<Department>(model);
+                var department = _mapper.Map<Department>(model);
                 department.Id = id;
                 var count = _departmentRepository.Update(department);
                 if (count > 0)
@@ -104,9 +104,9 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            
+
             return Details(id, "Delete");
-          
+
         }
 
 

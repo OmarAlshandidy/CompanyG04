@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +10,7 @@ namespace Company.G04.BLL.Interfaces
     public interface IEmployeeRepository:IGenericRepository<Employee>
     {
         List<Employee> GetByName(string name);
+
+
     }
 }

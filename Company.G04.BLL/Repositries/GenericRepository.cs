@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace Company.G04.BLL.Repositries
         {
             if (typeof(T) == typeof(Employee))
             {
-                return( IEnumerable <T> )_context.Employees.Include(E=>E.Department).ToList();
+                return (IEnumerable<T>)_context.Employees.Include(E=>E.Department).ToList();
             }
             return _context.Set<T>().ToList();
         }
@@ -31,7 +31,7 @@ namespace Company.G04.BLL.Repositries
         {
             if (typeof(T) == typeof(Employee))
             {
-                return _context.Employees.Include(E => E.Department).FirstOrDefault(E=>E.Id==id ) as T;
+                return _context.Employees.Include(E => E.Department).FirstOrDefault(E=>E.Id ==id) as T;
             }
             return _context.Set<T>().Find(id);
            
@@ -45,7 +45,6 @@ namespace Company.G04.BLL.Repositries
 
         public int Update(T model)
         {
-            
             _context.Set<T>().Update(model);
             return _context.SaveChanges();
         }

@@ -15,24 +15,39 @@ namespace Company.G04.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
 
         public EmployeeController(IEmployeeRepository employeeRepository
-            ,IMapper mapper)
+            ,IDepartmentRepository departmentRepository
+            , IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+           _departmentRepository = departmentRepository;
             _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult Index()
-        {
-            var employees = _employeeRepository.GetAll();
+        public ActionResult Index( string SearchInput)
+         {
+
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepository.GetAll();
+            }
+            else
+            {
+                employees = _employeeRepository.GetByName(SearchInput);
+            }
             return View(employees);
         }
         [HttpGet]
 
         public ActionResult Create()
-        {
+        { 
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments; 
+
             return View();
         }
         [HttpPost]
@@ -60,13 +75,15 @@ namespace Company.G04.PL.Controllers
                 //};
                 #endregion
                 #region Auto Mapping
-                var employee =  _mapper.Map<Employee>(model);
+                var employee = _mapper.Map<Employee>(model);
                 #endregion
                 #endregion
-
+    
                 var count = _employeeRepository.Add(employee);
                 if (count > 0)
                 {
+                    TempData["Message"] = "Employee Is Created !!";
+
                     return RedirectToAction("Index");
                 }
             }
@@ -89,6 +106,8 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             if (id is null) return BadRequest("Invalid Id ");
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
@@ -102,7 +121,7 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var  employee  = _mapper.Map<Employee>(model);
+                var employee = _mapper.Map<Employee>(model);
                 employee.Id = id;
                 // if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Update(employee);
@@ -117,6 +136,7 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
+           
 
             return Details(id, "Delete");
 
@@ -132,7 +152,7 @@ namespace Company.G04.PL.Controllers
                 if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Delete(employee);
                 if (count > 0)
-                {
+                {       
                     return RedirectToAction("Index");
                 }
 
@@ -141,4 +161,3 @@ namespace Company.G04.PL.Controllers
         }
     }
 }
-

@@ -19,7 +19,9 @@ namespace Company.G04.PL
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaltConnection"));
-            }); // Allow DI For CompanyDbContext 
+            }); // Allow DI For CompanyDbContext
+
+            builder.Services.AddAutoMapper(M => M.AddProfile(new MapProfile()));
 
             builder.Services.AddAutoMapper(E => E.AddProfile(new MapProfile()));
             var app = builder.Build();

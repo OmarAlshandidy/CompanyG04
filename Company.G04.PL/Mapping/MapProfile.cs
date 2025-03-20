@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
 
@@ -8,8 +8,8 @@ namespace Company.G04.PL.Mapping
     {
         public MapProfile()
         {
-            CreateMap<CreateEmployeeDto,Employee>().ReverseMap();
-            CreateMap<CreateDepartmentDto,Department>().ReverseMap();   
+            CreateMap<CreateEmployeeDto, Employee>().ReverseMap();
+            CreateMap<CreateDepartmentDto, Department>().ReverseMap();
         }
     }
 }
