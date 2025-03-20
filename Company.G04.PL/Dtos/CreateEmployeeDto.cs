@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Company.G04.DAL.Moudel;
 using Newtonsoft.Json.Serialization;

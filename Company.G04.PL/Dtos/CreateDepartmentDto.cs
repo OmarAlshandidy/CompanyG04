@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Company.G04.DAL.Moudel;
 
 namespace Company.G04.PL.Dtos

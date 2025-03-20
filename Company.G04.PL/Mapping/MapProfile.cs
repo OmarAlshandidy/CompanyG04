@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
 

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Moudel;

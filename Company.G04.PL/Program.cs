@@ -23,6 +23,7 @@ namespace Company.G04.PL
 
             builder.Services.AddAutoMapper(M => M.AddProfile(new MapProfile()));
 
+            builder.Services.AddAutoMapper(E => E.AddProfile(new MapProfile()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
