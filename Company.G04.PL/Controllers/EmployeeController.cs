@@ -1,4 +1,5 @@
-﻿using Company.G04.BLL.Interfaces;
+using AutoMapper;
+using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Data.Context;
 using Company.G04.DAL.Data.Migrations;
@@ -14,34 +15,24 @@ namespace Company.G04.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository,IDepartmentRepository departmentRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository
+            ,IMapper mapper)
         {
             _employeeRepository = employeeRepository;
-            _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult Index(string? SearchInput)
+        public ActionResult Index()
         {
-            IEnumerable<Employee> employees;
-            if (string.IsNullOrEmpty(SearchInput))
-            {
-                employees = _employeeRepository.GetAll();
-            }
-            else
-            {
-                employees = _employeeRepository.GetByName(SearchInput);
-            }
-            
+            var employees = _employeeRepository.GetAll();
             return View(employees);
         }
         [HttpGet]
 
         public ActionResult Create()
         {
-            var departments = _departmentRepository.GetAll();
-            ViewData["departments"] = departments;
             return View();
         }
         [HttpPost]
@@ -50,23 +41,29 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee()
-                {
-                 
-                    Name = model.Name,
-                    Age = model.Age,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Salary = model.Salary,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
-                    DepartmentId = model.DepartmentId
-                   
+                #region Mapping
+                #region  Manaul Mapping
+                //var employee = new Employee()
+                //{
 
-                };
+                //    Name = model.Name,
+                //    Age = model.Age,
+                //    Address = model.Address,
+                //    Email = model.Email,
+                //    Phone = model.Phone,
+                //    Salary = model.Salary,
+                //    IsActive = model.IsActive,
+                //    IsDeleted = model.IsDeleted,
+                //    HiringDate = model.HiringDate,
+                //    CreateAt = model.CreateAt,
+
+                //};
+                #endregion
+                #region Auto Mapping
+                var employee =  _mapper.Map<Employee>(model);
+                #endregion
+                #endregion
+
                 var count = _employeeRepository.Add(employee);
                 if (count > 0)
                 {
@@ -81,43 +78,21 @@ namespace Company.G04.PL.Controllers
 
         [HttpGet]
         public ActionResult Details(int? id, string ViewName = "Details")
-
         {
             if (id is null) return BadRequest();
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-           
+
             return View(ViewName, employee);
         }
 
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-
-           
-
             if (id is null) return BadRequest("Invalid Id ");
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-            var employeeDto = new CreateEmployeeDto()
-            {
-
-                Name = employee.Name,
-                Age = employee.Age,
-                Address = employee.Address,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Salary = employee.Salary,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                HiringDate = employee.HiringDate,
-                CreateAt = employee.CreateAt,
-                DepartmentId = employee.DepartmentId,
-
-            };
-
-            var departments = _departmentRepository.GetAll();
-            ViewData["departments"] = departments;
+            var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
             return View(employeeDto);
         }
 
@@ -127,24 +102,11 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee()
-                {
-                    Id = id,
-                    Name = model.Name,
-                    Age = model.Age,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Salary = model.Salary,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
-                     DepartmentId = model.DepartmentId
-                };
+                var  employee  = _mapper.Map<Employee>(model);
+                employee.Id = id;
                 // if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Update(employee);
-                    if (count > 0)
+                if (count > 0)
                 {
                     return RedirectToAction("Index");
                 }

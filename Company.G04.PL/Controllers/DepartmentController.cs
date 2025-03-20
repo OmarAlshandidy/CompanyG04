@@ -1,4 +1,5 @@
-﻿using Company.G04.BLL.Interfaces;
+﻿using AutoMapper;
+using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
@@ -11,10 +12,14 @@ namespace Company.G04.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
+
         // aSK CLR  Create Object DepartemntRepository 
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public DepartmentController(IDepartmentRepository departmentRepository
+            ,IMapper mapper)
         {
             _departmentRepository = departmentRepository;
+          _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,12 +45,7 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var departments = new Department()
-                {
-                    Code = model.Code,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt
-                };
+                var  departments = _mapper.Map<Department>(model);
                 var count = _departmentRepository.Add(departments);
                 if(count > 0)
                 {
@@ -71,13 +71,8 @@ namespace Company.G04.PL.Controllers
             if (id is null) return BadRequest("Invalid Id ");
             var departments = _departmentRepository.Get(id.Value);
             if (departments is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-            var departmentDto = new CreateDepartmentDto()
-            {
-               
-                Code = departments.Code,
-                Name = departments.Name,
-                CreateAt = departments.CreateAt
-            };
+           var departmentDto = _mapper.Map<CreateDepartmentDto>(departments);
+            
             return View(departmentDto);
         }
 
@@ -87,14 +82,16 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var department = new Department()
-                {
-                    Id=id,
-                    Code = model.Code,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt
-                };
+                //var department = new Department()
+                //{
+                //    Id=id,
+                //    Code = model.Code,
+                //    Name = model.Name,
+                //    CreateAt = model.CreateAt
+                //};
                 //if (id != department.Id) return BadRequest();
+                var  department  =  _mapper.Map<Department>(model);
+                department.Id = id;
                 var count = _departmentRepository.Update(department);
                 if (count > 0)
                 {
