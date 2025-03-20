@@ -1,4 +1,5 @@
-﻿using Company.G04.BLL.Interfaces;
+﻿using AutoMapper;
+using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Data.Context;
 using Company.G04.DAL.Data.Migrations;
@@ -14,21 +15,39 @@ namespace Company.G04.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository
+            ,IDepartmentRepository departmentRepository
+            , IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+           _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult Index()
-        {
-            var employees = _employeeRepository.GetAll();
+        public ActionResult Index( string SearchInput)
+         {
+
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepository.GetAll();
+            }
+            else
+            {
+                employees = _employeeRepository.GetByName(SearchInput);
+            }
             return View(employees);
         }
         [HttpGet]
 
         public ActionResult Create()
-        {
+        { 
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments; 
+
             return View();
         }
         [HttpPost]
@@ -37,24 +56,34 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee()
-                {
+                #region Mapping
+                #region  Manaul Mapping
+                //var employee = new Employee()
+                //{
 
-                    Name = model.Name,
-                    Age = model.Age,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Salary = model.Salary,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
+                //    Name = model.Name,
+                //    Age = model.Age,
+                //    Address = model.Address,
+                //    Email = model.Email,
+                //    Phone = model.Phone,
+                //    Salary = model.Salary,
+                //    IsActive = model.IsActive,
+                //    IsDeleted = model.IsDeleted,
+                //    HiringDate = model.HiringDate,
+                //    CreateAt = model.CreateAt,
 
-                };
+                //};
+                #endregion
+                #region Auto Mapping
+                var employee = _mapper.Map<Employee>(model);
+                #endregion
+                #endregion
+    
                 var count = _employeeRepository.Add(employee);
                 if (count > 0)
                 {
+                    TempData["Message"] = "Employee Is Created !!";
+
                     return RedirectToAction("Index");
                 }
             }
@@ -77,22 +106,12 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             if (id is null) return BadRequest("Invalid Id ");
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-            var employeeDto = new CreateEmployeeDto()
-            {
-                Name = employee.Name,
-                Age = employee.Age,
-                Address = employee.Address,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Salary = employee.Salary,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                HiringDate = employee.HiringDate,
-                CreateAt = employee.CreateAt,
-            };
+            var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
             return View(employeeDto);
         }
 
@@ -102,21 +121,8 @@ namespace Company.G04.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee()
-                {
-                    Id = id,
-                    Name = model.Name,
-                    Age = model.Age,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Salary = model.Salary,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    HiringDate = model.HiringDate,
-                    CreateAt = model.CreateAt,
-
-                };
+                var employee = _mapper.Map<Employee>(model);
+                employee.Id = id;
                 // if (id != employee.Id) return BadRequest();
                 var count = _employeeRepository.Update(employee);
                 if (count > 0)
@@ -130,6 +136,7 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
+           
 
             return Details(id, "Delete");
 
@@ -154,4 +161,3 @@ namespace Company.G04.PL.Controllers
         }
     }
 }
-

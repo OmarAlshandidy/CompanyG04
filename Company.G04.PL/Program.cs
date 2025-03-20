@@ -1,6 +1,7 @@
 using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Data.Context;
+using Company.G04.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.G04.PL
@@ -18,7 +19,9 @@ namespace Company.G04.PL
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaltConnection"));
-            }); // Allow DI For CompanyDbContext 
+            }); // Allow DI For CompanyDbContext
+
+            builder.Services.AddAutoMapper(M => M.AddProfile(new MapProfile()));
 
             var app = builder.Build();
 
