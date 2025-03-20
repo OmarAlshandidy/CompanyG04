@@ -1,6 +1,7 @@
 using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
 using Company.G04.DAL.Data.Context;
+using Company.G04.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.G04.PL
@@ -20,6 +21,7 @@ namespace Company.G04.PL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaltConnection"));
             }); // Allow DI For CompanyDbContext 
 
+            builder.Services.AddAutoMapper(E => E.AddProfile(new MapProfile()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
