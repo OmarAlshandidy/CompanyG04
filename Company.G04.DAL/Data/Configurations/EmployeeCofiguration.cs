@@ -18,6 +18,7 @@ namespace Company.G04.DAL.Data.Configurations
                                 .WithMany(D => D.Employees)
                                 .HasForeignKey(E => E.DepartmentId)
                                 .OnDelete(DeleteBehavior.SetNull);
+            builder.Property(E => E.DepartmentId).HasColumnName("DeptID");
         }
     }
 }

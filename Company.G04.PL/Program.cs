@@ -1,7 +1,11 @@
+using System;
 using Company.G04.BLL.Interfaces;
 using Company.G04.BLL.Repositries;
+using Company.G04.BLL.UnitOfWork;
 using Company.G04.DAL.Data.Context;
+using Company.G04.DAL.Moudel;
 using Company.G04.PL.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.G04.PL
@@ -16,6 +20,8 @@ namespace Company.G04.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow DI For DepartmentRepository
             builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaltConnection"));
@@ -24,6 +30,10 @@ namespace Company.G04.PL
             builder.Services.AddAutoMapper(M => M.AddProfile(new MapProfile()));
 
             builder.Services.AddAutoMapper(E => E.AddProfile(new MapProfile()));
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<CompanyDbContext>()
+                .AddDefaultTokenProviders();
+ 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

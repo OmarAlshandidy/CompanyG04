@@ -5,7 +5,7 @@
 namespace Company.G04.DAL.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Relation : Migration
+    public partial class AddImage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,9 +21,15 @@ namespace Company.G04.DAL.Data.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "DepartmentId",
+                name: "DeptID",
                 table: "Employees",
                 type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ImageName",
+                table: "Employees",
+                type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
@@ -34,14 +40,14 @@ namespace Company.G04.DAL.Data.Migrations
                 defaultValue: "");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_DepartmentId",
+                name: "IX_Employees_DeptID",
                 table: "Employees",
-                column: "DepartmentId");
+                column: "DeptID");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Employees_Departments_DepartmentId",
+                name: "FK_Employees_Departments_DeptID",
                 table: "Employees",
-                column: "DepartmentId",
+                column: "DeptID",
                 principalTable: "Departments",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.SetNull);
@@ -51,15 +57,19 @@ namespace Company.G04.DAL.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Employees_Departments_DepartmentId",
+                name: "FK_Employees_Departments_DeptID",
                 table: "Employees");
 
             migrationBuilder.DropIndex(
-                name: "IX_Employees_DepartmentId",
+                name: "IX_Employees_DeptID",
                 table: "Employees");
 
             migrationBuilder.DropColumn(
-                name: "DepartmentId",
+                name: "DeptID",
+                table: "Employees");
+
+            migrationBuilder.DropColumn(
+                name: "ImageName",
                 table: "Employees");
 
             migrationBuilder.DropColumn(

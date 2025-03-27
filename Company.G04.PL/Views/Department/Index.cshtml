@@ -1,93 +1,62 @@
-@model IEnumerable<Employee>
+ @model IEnumerable<Department>
+
 @{
     ViewData["Title"] = "Index";
 }
+<h1>All Departments</h1>
 
-<form asp-action="Index" method="get" class="mt-4 row justify-content-center align-items-center">
-    <div class="row col-8 offest-1">
-        <div class="col-8">
-            <input placeholder="Search By Name " id="SearchInput" name="SearchInput" class="form-control" />
-        </div>
-
-        <div class="col-4">
-            <input type="submit" class="btn btn-success" value="Search" />
-        </div>
-
-    </div>
-</form>
 <br />
+<br />
+<a asp-action="Create" asp-controller="Department" class="btn btn-primary"> Create Department </a>
 
-<h1>All Employee </h1>
 <br />
 <br />
 
-@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+@if (Model.Count() > 0)
 {
-    <div class="mt-4 alert  alert-info">
-        <p>@TempData["Message"]</p>
-    </div>
-}
-<a asp-action="Create" asp-controller="Employee" class="btn btn-primary"> Create Employee </a>
 
-<br/>
-<br />
-@if(Model.Count() > 0 )
-{
     <table class="table tabletable-hover table-striped">
         <thead>
             <tr>
+                <th>Code</th>
                 <th>Name</th>
-                <th>Age</th>
-				<th>Email</th>
-                <th> Address   </th>
-                <th>Phone</th>
-                <th>Salary</th>
-                <th>IsActive</th>
-                <th>IsDeleted</th>
-                <th>@Html.DisplayNameFor(E => E.HiringDate)</th>
-                <th>@Html.DisplayNameFor(Elfie=>Elfie.CreateAt)</th>
-                <th>Department</th>
+                <th>Date Of Creation</th>
                 <th>Details</th>
                 <th>Update</th>
                 <th>Delete</th>
+
+
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@item.Code</td>
                     <td>@item.Name</td>
-                    <td>@item.Age</td>
-                    <td>@item.Email</td>
-                    <td>@item.Address</td>
-                    <td>@item.Phone</td>
-                    <td>@item.Salary</td>
-                    <td>@item.IsActive</td>
-                    <td>@item.IsDeleted</td>
-                    <td>@item.HiringDate</td>
                     <td>@item.CreateAt</td>
-                    @if (item.Department is null)
-                    {
-                        <td>No Department</td>
-                    }
-                    else
-                    {
-                        <td>@item.Department.Name</td>
-                    }
+                    <td>
+                        <a asp-action="Details" asp-route-id=@item.Id class="btn btn-warning">Details</a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id=@item.Id class="btn btn-success">Update</a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id=@item.Id class="btn btn-danger">Delete</a>
+                    </td>
 
-                    <partial name="ButtonPartialView" model="@item.Id"/>
 
                 </tr>
             }
         </tbody>
     </table>
 
-}else{
-    <div class="m-4 alert alert-info">
-        <h4> 
-            There Are No Employee :(
+}
+else
+{
+    <div class="mt-4 alert  alert-info">
+        <h4>
+            There Are No Department :(
         </h4>
     </div>
 }
-
-
