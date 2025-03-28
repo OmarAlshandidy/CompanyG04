@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Company.G04.PL.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     @*Start Header*@
@@ -27,15 +28,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Department</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Departments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index"> Employee </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark btn btn-warning" asp-area="" asp-controller="Account" asp-action="SignOut">Log Out</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav d-flex justify-content-end gap-3">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary text-white" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-success text-white" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-danger text-dark" asp-area="" asp-controller="Account" asp-action="SignOut">SignOut</a>
+                        </li>
+                    </ul>
+
+                   
+
                 </div>
             </div>
         </nav>

@@ -33,6 +33,10 @@ namespace Company.G04.PL
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<CompanyDbContext>()
                 .AddDefaultTokenProviders();
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/Account/SignIn";
+            });
  
             var app = builder.Build();
 
@@ -48,8 +52,9 @@ namespace Company.G04.PL
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            
+            app.UseAuthentication();
+            app.UseAuthorization();
+         
 
             app.MapControllerRoute(
                 name: "default",

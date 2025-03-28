@@ -8,6 +8,7 @@ using Company.G04.DAL.Data.Migrations;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
 using Company.G04.PL.Healper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ using Microsoft.CodeAnalysis;
 
 namespace Company.G04.PL.Controllers
 {
+    [Authorize]
+
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;

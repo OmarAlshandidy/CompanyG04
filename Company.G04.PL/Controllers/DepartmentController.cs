@@ -5,12 +5,15 @@ using Company.G04.BLL.Repositries;
 using Company.G04.BLL.UnitOfWork;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 
 namespace Company.G04.PL.Controllers
 {
+    [Authorize]
+
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
