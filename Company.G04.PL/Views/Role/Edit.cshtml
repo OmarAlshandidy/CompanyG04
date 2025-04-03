@@ -1,4 +1,4 @@
-﻿@model UserViewDto
+﻿@model RoleViewDto
 @{
     ViewData["Title"] = "Edit";
 }
@@ -9,7 +9,9 @@
 
 <form asp-action="Edit" enctype="multipart/form-data">
 
-    <partial name="UserPartialViews/EditCreateEmployeePartialView" model="Model" />
+    <partial name="RolePartialViews/EditCreateEmployeePartialView" model="Model" />
+
+    <a asp-action="AddOrRemoveUser" asp-route-roleId="@Model.Id" class="btn btn-success">Add Or Remove User</a>
 
     <input type="submit" value="Save" class="btn btn-warning" />
     <a asp-action="Index" class="btn btn-light">Back To List</a>

@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 
 
 namespace Company.G04.PL.Controllers
@@ -21,17 +20,17 @@ namespace Company.G04.PL.Controllers
 
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IDepartmentRepository _departmentRepository;
+        //private readonly IEmployeeRepository _employeeRepository;
+        //private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeController(IEmployeeRepository employeeRepository
-            ,IDepartmentRepository departmentRepository
-            , IMapper mapper ,IUnitOfWork unitOfWork)
+        public EmployeeController(/*IEmployeeRepository employeeRepository*/
+            //,IDepartmentRepository departmentRepository,
+            IMapper mapper ,IUnitOfWork unitOfWork)
         {
-            _employeeRepository = employeeRepository;
-           _departmentRepository = departmentRepository;
+            //_employeeRepository = employeeRepository;
+           //_departmentRepository = departmentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -52,10 +51,10 @@ namespace Company.G04.PL.Controllers
         }
         [HttpGet]
 
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
             { 
-            var departments =await _unitOfWork.DepartmentRepository.GetAllAsync();
-            ViewData["departments"] = departments; 
+            //var departments =await _unitOfWork.DepartmentRepository.GetAllAsync();
+            //ViewData["departments"] = departments; 
 
             return View();
         }
@@ -107,21 +106,23 @@ namespace Company.G04.PL.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet] 
         public async Task<ActionResult> Details(int? id, string ViewName = "Details")
         {
             if (id is null) return BadRequest();
             var employee =await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
-           
-            return View(ViewName, employee);
+            var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
+
+            return View(ViewName, employeeDto);
         }
 
         [HttpGet]
         public async Task<ActionResult> Edit(int? id)
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAllAsync();
-            ViewData["departments"] = departments;
+            //var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
+            //ViewData["departments"] = departments;
+
             if (id is null) return BadRequest("Invalid Id ");
             var employee = await  _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
@@ -144,9 +145,9 @@ namespace Company.G04.PL.Controllers
                 model.ImageName=DocumentSettings.UplodFile(model.Image, "images");
 
                 var employee = _mapper.Map<Employee>(model);
-                employee.Id = id;
+                //employee.Department.Code = model.Department.Code;
                 // if (id != employee.Id) return BadRequest();
-                _employeeRepository.Update(employee);
+               _unitOfWork.EmployeeRepository.Update(employee);
                 var count = await _unitOfWork.CompleteAsync();
                 if (count > 0)
                 {
@@ -159,25 +160,29 @@ namespace Company.G04.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            
             if (id is null) return BadRequest();
             var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id {id} is not Found " });
+            var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
 
+            return View(employeeDto);
 
-            return View(employee);
 
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete([FromRoute] int id, Employee employee)
+        public async Task<IActionResult> Delete([FromRoute] int id , CreateEmployeeDto model)
         {
+
             if (ModelState.IsValid)
             {
-                if (id != employee.Id) return BadRequest();
-                _employeeRepository.Delete(employee);
-                var count = await _unitOfWork.CompleteAsync();  
+                var employee = _mapper.Map<Employee>(model);
+
+                _unitOfWork.EmployeeRepository.Delete(employee);
+                var count = await _unitOfWork.CompleteAsync();
                 if (count > 0)
                 {
                     if (employee.ImageName is not null)
@@ -186,9 +191,9 @@ namespace Company.G04.PL.Controllers
                     }
                     return RedirectToAction("Index");
                 }
-
             }
-            return View(employee);
+            
+            return View(model);
         }
     }
 }

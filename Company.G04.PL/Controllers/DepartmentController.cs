@@ -1,14 +1,9 @@
-using System.Threading.Tasks;
 using AutoMapper;
-using Company.G04.BLL.Interfaces;
-using Company.G04.BLL.Repositries;
 using Company.G04.BLL.UnitOfWork;
 using Company.G04.DAL.Moudel;
 using Company.G04.PL.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Microsoft.EntityFrameworkCore.Migrations.Internal;
 
 namespace Company.G04.PL.Controllers
 {
@@ -16,15 +11,15 @@ namespace Company.G04.PL.Controllers
 
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        //private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
         // aSK CLR  Create Object DepartemntRepository 
-        public DepartmentController(IDepartmentRepository departmentRepository
-            , IMapper mapper , IUnitOfWork unitOfWork)
+        public DepartmentController(/*IDepartmentRepository departmentRepository  ,*/
+             IMapper mapper , IUnitOfWork unitOfWork)
         {
-            _departmentRepository = departmentRepository;
+            //_departmentRepository = departmentRepository;
             _mapper = mapper;
           _unitOfWork = unitOfWork;
         }

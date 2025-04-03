@@ -1,4 +1,4 @@
-﻿@model UserViewDto
+﻿@model RoleViewDto
 @{
     ViewData["Title"] = "Delete";
 }
@@ -8,9 +8,9 @@
 <br />
 
 <form asp-action="Delete">
-    <partial name="UserPartialViews/DeleteDetailsEmployeePartialView" />
+    <partial name="RolePartialViews/DeleteDetailsEmployeePartialView" />
 
-    <input type="submit" value="Delete" class="btn btn-danger" />
+    <input type="submit" value="Delete" class="btn btn-danger"/>
 
     <a asp-action="Index" class="btn btn-light">Back To List</a>
 </form>

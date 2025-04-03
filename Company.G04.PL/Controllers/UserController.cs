@@ -9,46 +9,45 @@ using Company.G04.PL.Dtos.Auth;
 
 namespace Company.G04.PL.Controllers
 {
-    //[Authorize(Roles = "Admin")]
     public class UserController : Controller
-	{
-		private readonly UserManager<AppUser> _userManager;
+    {
+        private readonly UserManager<AppUser> _userManager;
 
-		public UserController(UserManager<AppUser> userManager) 
-		{
-			_userManager = userManager;
-		}
-		public async Task<IActionResult> Index(string searchInput)
-		{
-			var users = Enumerable.Empty<UserViewDto>();
+        public UserController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
+        public async Task<IActionResult> Index(string searchInput)
+        {
+            var users = Enumerable.Empty<UserViewDto>();
 
-			if (string.IsNullOrEmpty(searchInput))
-			{
-				users = await _userManager.Users.Select(U => new UserViewDto()
-				{
-					Id = U.Id,
-					FirstName = U.FirstName,
-					LastName = U.LastName,
-					Email = U.Email,
-				}).ToListAsync();
+            if (string.IsNullOrEmpty(searchInput))
+            {
+                users = await _userManager.Users.Select(U => new UserViewDto()
+                {
+                    Id = U.Id,
+                    FirstName = U.FirstName,
+                    LastName = U.LastName,
+                    Email = U.Email,
+                }).ToListAsync();
 
                 foreach (var user in users)
                 {
                     user.Roles = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(user.Id));
                 }
             }
-			else
-			{
-				users = await _userManager.Users.Where(U => U.Email
+            else
+            {
+                users = await _userManager.Users.Where(U => U.Email
                     .ToLower()
                     .Contains(searchInput.ToLower()))
-					.Select(U => new UserViewDto()
-					{
-						Id = U.Id,
-						FirstName = U.FirstName,
-						LastName = U.LastName,
-						Email = U.Email,
-					}).ToListAsync();
+                    .Select(U => new UserViewDto()
+                    {
+                        Id = U.Id,
+                        FirstName = U.FirstName,
+                        LastName = U.LastName,
+                        Email = U.Email,
+                    }).ToListAsync();
 
                 foreach (var user in users)
                 {
@@ -56,25 +55,25 @@ namespace Company.G04.PL.Controllers
                 }
             }
 
-			return View(users);
-		}
+            return View(users);
+        }
         public async Task<IActionResult> Details(string? id, string ViewName = "Details")
         {
             if (id == null)
                 return BadRequest();//error 400
 
-			var UserFromDb = await _userManager.FindByIdAsync(id);
+            var UserFromDb = await _userManager.FindByIdAsync(id);
 
-			if (UserFromDb == null)
+            if (UserFromDb == null)
                 return NotFound(); // 404
 
-			var user = new UserViewDto()
-			{
-				Id = UserFromDb.Id,
-				FirstName = UserFromDb.FirstName,
-				LastName = UserFromDb.LastName,
-				Email = UserFromDb.Email,
-			};
+            var user = new UserViewDto()
+            {
+                Id = UserFromDb.Id,
+                FirstName = UserFromDb.FirstName,
+                LastName = UserFromDb.LastName,
+                Email = UserFromDb.Email,
+            };
 
             user.Roles = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(user.Id));
 
@@ -88,10 +87,10 @@ namespace Company.G04.PL.Controllers
         [ValidateAntiForgeryToken]//btmn3 ay request mn app khargy zy el postman msln
         public async Task<IActionResult> Edit([FromRoute] string id, UserViewDto model)
         {
-           
+
             if (id != model.Id)
                 return BadRequest();
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var userFromDb = await _userManager.FindByIdAsync(id);
                 if (userFromDb == null)
@@ -102,9 +101,9 @@ namespace Company.G04.PL.Controllers
                 userFromDb.Email = model.Email;
 
                 await _userManager.UpdateAsync(userFromDb);
-                
+
                 return RedirectToAction("Index");
-                
+
             }
 
             return View(model);
@@ -114,7 +113,7 @@ namespace Company.G04.PL.Controllers
         {
             return Details(id, "Delete");
         }
-         
+
         [HttpPost]
         [ValidateAntiForgeryToken]//btmn3 ay request mn app khargy zy el postman msln
         public async Task<IActionResult> Delete([FromRoute] string id, UserViewDto model)
@@ -138,3 +137,4 @@ namespace Company.G04.PL.Controllers
         }
     }
 }
+

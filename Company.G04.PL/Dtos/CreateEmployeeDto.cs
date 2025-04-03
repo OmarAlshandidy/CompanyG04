@@ -7,6 +7,8 @@ namespace Company.G04.PL.Dtos
 {
     public class CreateEmployeeDto
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage ="Name Is Requird !!")]
         public string Name { get; set; }
         [Range(22,60 , ErrorMessage ="Age Must Be  Between 22 and 60")]
@@ -30,7 +32,7 @@ namespace Company.G04.PL.Dtos
 
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+        public string? DepartmentName { get; set; }
         public string? ImageName { get; set; }
         public IFormFile?  Image { get; set; }
     }

@@ -21,6 +21,6 @@ namespace Company.G04.DAL.Moudel
         public string? ImageName { get; set; }
 
         public int? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+        public Department Department { get; set; }
     }
 }

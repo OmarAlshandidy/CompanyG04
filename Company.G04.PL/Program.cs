@@ -18,8 +18,8 @@ namespace Company.G04.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow DI For DepartmentRepository
-            builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); // Allow DI For DepartmentRepository
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddDbContext<CompanyDbContext>(options=>
@@ -28,8 +28,6 @@ namespace Company.G04.PL
             }); // Allow DI For CompanyDbContext
 
             builder.Services.AddAutoMapper(M => M.AddProfile(new MapProfile()));
-
-            builder.Services.AddAutoMapper(E => E.AddProfile(new MapProfile()));
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<CompanyDbContext>()
                 .AddDefaultTokenProviders();

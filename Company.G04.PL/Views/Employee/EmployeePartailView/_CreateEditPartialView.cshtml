@@ -1,10 +1,14 @@
 @model CreateEmployeeDto
 
+@inject IUnitOfWork _departmentRepo
+@{
+    // var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
+    var Departments = new SelectList( await _departmentRepo.DepartmentRepository.GetAllAsync(), "Id", "Name");
 
-@* @{
-    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
 }
- *@
+
+
+
 <div class="my-3">
     <label asp-for="Name" class="col-form-label"></label>
     <input asp-for="Name" class="form-control" />
@@ -62,14 +66,14 @@
 </div>
 
 
-@* <div class="my-3">
+<div class="my-3">
     <label asp-for="DepartmentId" class="col-form-label-lg"></label>
     <select asp-for="DepartmentId" asp-items="Departments" class="form-control">
         <option value="@null">-- Select Department --</option>
 
     </select>
 </div>
- *@
+
 <div class="my-3">
     <label asp-for="Image" class="col-form-label-lg"></label>
     <input asp-for="Image" type="file" class="form-control" />
